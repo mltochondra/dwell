@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="refresh" content="30">
+    <title>Dwell · Room</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; }
+        .count { font-size: 18px; color: #555; }
+        ul { list-style: none; padding: 0; }
+        li { display: flex; justify-content: space-between; align-items: center;
+             padding: 14px 0; border-bottom: 1px solid #eee; }
+        .name { font-weight: 600; }
+        .meta { color: #777; font-size: 14px; margin-top: 2px; }
+        .mins { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    </style>
+</head>
+<body>
+    <h1>Dwell</h1>
+
+    <p class="count" th:unless="${visits.isEmpty()}"
+       th:text="${visits.size() == 1 ? '1 student in the room' : visits.size() + ' students in the room'}"></p>
+
+    <p th:if="${visits.isEmpty()}">The room is empty.</p>
+
+    <ul th:unless="${visits.isEmpty()}">
+        <li th:each="v : ${visits}">
+            <div>
+                <div class="name" th:text="${v.student.name}"></div>
+                <div class="meta"
+                     th:text="'with ' + ${v.supervisor.name} + ' · since ' + ${#temporals.format(v.timeIn, 'HH:mm')}"></div>
+            </div>
+            <div class="mins" th:text="${v.minutes} + ' min'"></div>
+        </li>
+    </ul>
+</body>
+</html>

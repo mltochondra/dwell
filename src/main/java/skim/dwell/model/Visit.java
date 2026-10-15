@@ -2,6 +2,7 @@ package skim.dwell.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.time.Duration;
 
 @Entity
 @Table(name = "visits")
@@ -50,4 +51,8 @@ public class Visit {
     public LocalDateTime getTimeIn() { return timeIn; }
     public LocalDateTime getTimeOut() { return timeOut; }
     public CheckoutMethod getCheckoutMethod() { return checkoutMethod; }
+    public long getMinutes() {
+    LocalDateTime end = (timeOut != null) ? timeOut : LocalDateTime.now();
+    return Duration.between(timeIn, end).toMinutes();
+}
 }

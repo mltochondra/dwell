@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface VisitRepository extends JpaRepository<Visit, Long> {
     Optional<Visit> findByStudentAndTimeOutIsNull(Student student);
-    List<Visit> findByTimeOutIsNull();
+    List<Visit> findByTimeOutIsNullOrderByTimeInAsc();
 }

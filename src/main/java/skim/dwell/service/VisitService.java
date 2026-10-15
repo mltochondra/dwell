@@ -57,7 +57,7 @@ public class VisitService {
     }
 
     public List<Visit> whoIsHere() {
-        return visits.findByTimeOutIsNull();
+        return visits.findByTimeOutIsNullOrderByTimeInAsc();
     }
 
     private String normalize(String email) {
