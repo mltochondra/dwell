@@ -13,13 +13,16 @@ public class VisitService {
     private final StudentRepository students;
     private final SupervisorRepository supervisors;
     private final VisitRepository visits;
+    private final NotificationService notifications;
 
     public VisitService(StudentRepository students,
                         SupervisorRepository supervisors,
-                        VisitRepository visits) {
+                        VisitRepository visits,
+                        NotificationService notifications) {
         this.students = students;
         this.supervisors = supervisors;
         this.visits = visits;
+        this.notifications = notifications;
     }
 
     public Optional<Visit> findOpenVisit(String email) {
@@ -45,7 +48,9 @@ public class VisitService {
         Supervisor supervisor = supervisors.findById(supervisorId)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown supervisor"));
 
-        return visits.save(new Visit(student, supervisor));
+        Visit saved = visits.save(new Visit(student, supervisor));
+        notifications.notifyCheckIn(saved);
+        return saved;
     }
 
     @Transactional
@@ -53,7 +58,9 @@ public class VisitService {
         Visit visit = findOpenVisit(email)
                 .orElseThrow(() -> new IllegalStateException("Not checked in"));
         visit.checkOut(method);
-        return visits.save(visit);
+        Visit saved = visits.save(visit);
+        notifications.notifyCheckOut(saved);
+        return saved;
     }
 
     public List<Visit> whoIsHere() {

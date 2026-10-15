@@ -3,9 +3,11 @@ package skim.dwell;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 import skim.dwell.model.*;
 import skim.dwell.repository.SupervisorRepository;
+import skim.dwell.service.NotificationService;
 import skim.dwell.service.VisitService;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,6 +18,7 @@ class VisitServiceTests {
 
     @Autowired VisitService visitService;
     @Autowired SupervisorRepository supervisors;
+    @MockitoBean NotificationService notifications;
 
     @Test
     void checkInThenCheckOut() {
