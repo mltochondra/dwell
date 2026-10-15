@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dwell</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 420px; margin: 40px auto; padding: 0 16px; }
+        input, select, button { display: block; width: 100%; padding: 12px; margin: 8px 0;
+                                font-size: 16px; box-sizing: border-box; }
+        button { cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Dwell</h1>
+
+    <form th:if="${step == 'identify'}" method="post" th:action="@{/scan}">
+        <p>Enter your school email to begin.</p>
+        <input type="email" name="email" required placeholder="you@school.com">
+        <button type="submit">Continue</button>
+    </form>
+
+    <form th:if="${step == 'checkin'}" method="post" th:action="@{/checkin}">
+        <p th:text="${email}"></p>
+        <input type="hidden" name="email" th:value="${email}">
+        <input th:if="${isNew}" type="text" name="name" required placeholder="Your full name">
+        <select name="supervisorId" required>
+            <option value="" disabled selected>Choose your supervisor</option>
+            <option th:each="s : ${supervisors}" th:value="${s.id}" th:text="${s.name}"></option>
+        </select>
+        <button type="submit">Check in</button>
+    </form>
+
+    <form th:if="${step == 'checkout'}" method="post" th:action="@{/checkout}">
+        <p>You're checked in as <strong th:text="${email}"></strong>.</p>
+        <input type="hidden" name="email" th:value="${email}">
+        <button type="submit">Check out</button>
+    </form>
+
+    <div th:if="${step == 'done'}">
+        <p th:text="${message}"></p>
+        <a th:href="@{/scan}">Back</a>
+    </div>
+
+    <p th:if="${email != null}"><a th:href="@{/scan/forget}">Not you?</a></p>
+</body>
+</html>

@@ -27,6 +27,10 @@ public class VisitService {
                 .flatMap(visits::findByStudentAndTimeOutIsNull);
     }
 
+    public Optional<Student> findStudent(String email) {
+    return students.findByEmail(normalize(email));
+}
+
     @Transactional
     public Visit checkIn(String name, String email, Long supervisorId) {
         String cleanEmail = normalize(email);
